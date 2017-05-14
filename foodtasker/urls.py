@@ -13,16 +13,18 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url,include
 from django.contrib import admin
 from foodtaskerapp import views
 from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 from django.conf import settings
 
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.home, name='home'),
+    #
     url(r'^restaurant/sign-in/$', auth_views.login,
         {'template_name':'restaurant/sign-in.html'},
         name='restaurant-sign-in'),
@@ -31,5 +33,9 @@ urlpatterns = [
         name = 'restaurant-sign-out'),
     url(r'^restaurant/sign-up', views.restaurant_sign_up,
         name = 'restaurant-sign-up'),
-    url(r'^restaurant/$',views.restaurant_home, name='restaurant-home')
+    url(r'^restaurant/$',views.restaurant_home, name='restaurant-home'),
+    # Sign In/ Sign Up/ Sign Out
+    url(r'^api/social/', include('rest_framework_social_oauth2.urls')),
+    #/conver-token(sign in/sign up)
+    #/revoke-token(sign out)
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
